@@ -1,3 +1,28 @@
 server/shopify/node_modules/
 
 server/shopify/.env
+
+# Logs
+client/coding-test-shopify/logs
+client/coding-test-shopify/*.log
+client/coding-test-shopify/npm-debug.log*
+client/coding-test-shopify/yarn-debug.log*
+client/coding-test-shopify/yarn-error.log*
+client/coding-test-shopify/pnpm-debug.log*
+client/coding-test-shopify/lerna-debug.log*
+
+client/coding-test-shopify/node_modules
+client/coding-test-shopify/dist
+client/coding-test-shopify/dist-ssr
+client/coding-test-shopify/*.local
+
+# Editor directories and files
+client/coding-test-shopify/.vscode/*
+!client/coding-test-shopify/.vscode/extensions.json
+client/coding-test-shopify/.idea
+client/coding-test-shopify/.DS_Store
+client/coding-test-shopify/*.suo
+client/coding-test-shopify/*.ntvs*
+client/coding-test-shopify/*.njsproj
+client/coding-test-shopify/*.sln
+client/coding-test-shopify/*.sw?
