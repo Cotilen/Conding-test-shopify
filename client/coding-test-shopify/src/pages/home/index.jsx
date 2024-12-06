@@ -71,8 +71,6 @@ export default function Home() {
   };
 
   const handleFilter = async (itens) => {
-    console.log(itens);
-    
     setProducts(itens);
   };
 
@@ -80,7 +78,7 @@ export default function Home() {
     <BORDER>
       <H1>Relatório de Vendas</H1>
 
-      <Box filterProducts={(products) => handleFilter(products)}/>
+      <Box filterProducts={(products) => handleFilter(products)} onClick = {(costumers)=> handleOnclick(costumers)}/>
       	<ToastContainer
 				position="top-right"
 				autoClose={5000}

@@ -78,7 +78,7 @@ const Dates = styled.div`
 
   label {
     font-size: 0.8rem;
-    color: #555;
+    color: #00bcd4;
   }
 
   input {
@@ -86,22 +86,28 @@ const Dates = styled.div`
   }
 `;
 
-const Box = ({filterProducts}) => {
+const Box = ({filterProducts, onClick}) => {
   const [initialDate, setInitialDate] = useState(null);
   const [finalDate, setFinalDate] = useState(null);
   const [month, setMonth] = useState(null);
+
+  const handleOnChange = (month) => {
+    setFinalDate("");
+    setInitialDate("");
+    setMonth(month);
+  };
 
   const handleFilter = async () =>{
     if (initialDate && finalDate) {
       const response = await getOrdersByDate(initialDate, finalDate);
 
       filterProducts(response)
-      setSelectedProduct("");
+      onClick("")
     } else if (month) {
       const response = await getOrdersByMonth(month);
 
       filterProducts(response)
-      setSelectedProduct("");
+      onClick("")
     } else {
       toast.error("Selecione as datas ou o mês que deseja filtrar");
     }
@@ -134,7 +140,7 @@ const Box = ({filterProducts}) => {
                 type="month"
                 id="month"
                 value={month}
-                onChange={(e) => setMonth(e.target.value)}
+                onChange={(e) => handleOnChange(e.target.value)}
               />
             </div>
           </Dates>

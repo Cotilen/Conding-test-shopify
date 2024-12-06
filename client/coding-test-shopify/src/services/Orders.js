@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export async function getOrdersByDate(inicialdate, finaldate){
-    const url = `http://localhost:3000/api/orders/processed?dataInicial=${inicialdate}&dataFinal=${finaldate}`
+    const url = `https://conding-test-shopify.onrender.com/api/orders/processed?dataInicial=${inicialdate}&dataFinal=${finaldate}`
 
     const response = await axios.get(url);
 
@@ -9,7 +9,7 @@ export async function getOrdersByDate(inicialdate, finaldate){
 }
 
 export async function getOrdersByMonth(month){
-    const url = `http://localhost:3000/api/orders/month?month=${month}`
+    const url = `https://conding-test-shopify.onrender.com/api/orders/month?month=${month}`
 
     const response = await axios.get(url);
 
