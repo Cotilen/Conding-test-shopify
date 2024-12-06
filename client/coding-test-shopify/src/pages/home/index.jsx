@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import HomeHeader from "./components/header.jsx";
+import HomeHeader from "./components/box.jsx";
 import { useState } from "react";
-import { getOrdersByDate, getOrdersByMonth } from "../../services/Orders.js";
 import { formatToBRLDate } from "../../utils/formatDate.js";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Box from "./components/box.jsx";
 
 const TABLE = styled.table`
   border-collapse: collapse;
@@ -44,56 +44,43 @@ const MAIN = styled.div`
   align-items: start;
 `;
 
-const INPUT = styled.input`
-  padding: 1rem;
-  color: white;
-  border: 1px solid black;
-  border-radius: 0.5rem;
-`;
-const FILTRO = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 1rem;
-  justify-content: space-between;
+const BORDER = styled.div`
+  padding-top: 100px;
 `;
 
-const BORDER = styled.div``;
+const H1 = styled.h1`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #1c1c1c; 
+  color: white; 
+  z-index: 1000; 
+  padding: 20px 0;
+  text-align: center;
+  font-size: 2rem;
+`;
+
 
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [inicialDate, setInicialDate] = useState(null);
-  const [finalDate, setFinalDate] = useState(null);
-  const [month, setMonth] = useState(null);
 
   const handleOnclick = (produto) => {
     setSelectedProduct(produto);
   };
 
-  const handleOnChange = (month) => {
-    setFinalDate("");
-    setInicialDate("");
-    setMonth(month);
-  };
-
-  const handleFilter = async () => {
-    if (inicialDate && finalDate) {
-      const response = await getOrdersByDate(inicialDate, finalDate);
-
-      setProducts(response);
-      setSelectedProduct("");
-    } else if (month) {
-      const response = await getOrdersByMonth(month);
-      setProducts(response);
-      setSelectedProduct("");
-    } else {
-      toast.error("Selecione as datas ou o mês que deseja filtrar");
-    }
+  const handleFilter = async (itens) => {
+    console.log(itens);
+    
+    setProducts(itens);
   };
 
   return (
     <BORDER>
+      <H1>Relatório de Vendas</H1>
+
+      <Box filterProducts={(products) => handleFilter(products)}/>
       	<ToastContainer
 				position="top-right"
 				autoClose={5000}
@@ -106,43 +93,6 @@ export default function Home() {
 				pauseOnHover
 				theme="dark"
 			/>
-      <div>
-        <h2>Filtre por período ou mês</h2>
-        <FILTRO>
-          <div className="datas">
-            <FILTRO>
-              <h4>Data Inicial:</h4>
-              <INPUT
-                type="date"
-                value={inicialDate}
-                onChange={(event) => setInicialDate(event.target.value)}
-              />
-            </FILTRO>
-            <FILTRO>
-              <h4>Data Final:</h4>
-              <INPUT
-                type="date"
-                value={finalDate}
-                onChange={(event) => setFinalDate(event.target.value)}
-              />
-            </FILTRO>
-          </div>
-          <FILTRO>
-            <h4>Selecione o mês</h4>
-            <INPUT
-              type="month"
-              onChange={(event) => handleOnChange(event.target.value)}
-            />
-          </FILTRO>
-        </FILTRO>
-
-        {/* Botão de Filtrar */}
-        <FILTRO>
-          <button onClick={handleFilter}>Filtrar</button>
-        </FILTRO>
-      </div>
-
-      <h1>Relatório de Vendas</h1>
       <MAIN>
         {!!products && products?.length ? (
           <TABLE border="1">
