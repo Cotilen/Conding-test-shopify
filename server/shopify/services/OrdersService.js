@@ -26,8 +26,8 @@ function processarPedidos(pedidos) {
                 resultado.products.push(produtoExistente);
             }
 
-            produtoExistente.quantidadeVendida += quantity_sold;
-            produtoExistente.valorTotal += total_sales_value;
+            produtoExistente.quantity_sold += quantity_sold;
+            produtoExistente.total_sales_value += total_sales_value;
 
             const nomeCliente = pedido.customer.id ? "Desconhecido: " + pedido.customer.id : 'Desconhecido';
             const emailCliente = 'Não informado';
