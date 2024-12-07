@@ -2,11 +2,10 @@ import styled from "styled-components";
 import HomeHeader from "./components/box.jsx";
 import { useState } from "react";
 import { formatToBRLDate } from "../../utils/formatDate.js";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+
 import Box from "./components/box.jsx";
 
-const TABLE = styled.table`
+const ProductsTable = styled.table`
   border-collapse: collapse;
   margin: 1rem;
   border: 1px solid #b0bec5;
@@ -21,6 +20,44 @@ const TABLE = styled.table`
     color: #000;
     font-weight: bold;
   }
+
+  
+  @media (max-width: 1200px) {
+    width: auto;
+  }
+
+  @media (max-width: 375px) {
+    margin: 0;
+    margin-top: 10px;
+    max-width: 350px;
+    font-size: 0.7rem;
+
+  }
+`;
+
+const CustomersTable = styled.table`
+  border-collapse: collapse;
+  margin: auto;
+  border: 1px solid #b0bec5;
+  width: 45dvw;
+
+  tr:nth-child(even) {
+    background-color: #212121;
+  }
+
+  @media (max-width: 1200px) {
+    width: auto;
+  }
+
+  @media (max-width: 425px) {
+    margin: 1rem;
+  }
+
+  @media (max-width: 375px) {
+    font-size: 0.7rem;
+    margin: 0;
+  }
+  
 `;
 
 const TH = styled.th`
@@ -29,6 +66,10 @@ const TH = styled.th`
   width: 120px;
   font-weight: bold;
   border: 1px solid #b0bec5;
+
+  @media (max-width: 425px) {
+    padding: 5px;
+  }
 `;
 
 const TD = styled.td`
@@ -37,15 +78,32 @@ const TD = styled.td`
   width: 120px;
   max-height: 80px;
   border: 1px solid #b0bec5;
+
+  @media (max-width: 425px) {
+    padding: 5px;
+
+  }
 `;
 
 const MAIN = styled.div`
   display: flex;
+  flex-direction: row;
   align-items: start;
+  grid-area: products;
 `;
 
 const BORDER = styled.div`
   padding-top: 100px;
+  width: 100%;
+  display: grid;
+  grid-template-areas: "customers products";
+  grid-template-columns: 1fr 1fr;
+
+  @media (max-width: 900px) {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
 `;
 
 const H1 = styled.h1`
@@ -53,14 +111,22 @@ const H1 = styled.h1`
   top: 0;
   left: 0;
   width: 100%;
-  background-color: #1c1c1c; 
-  color: white; 
-  z-index: 1000; 
+  background-color: #1c1c1c;
+  color: white;
+  z-index: 1000;
   padding: 20px 0;
   text-align: center;
   font-size: 2rem;
 `;
 
+const Customers = styled.div`
+  grid-area: customers;
+  gap: 2rem;
+
+`;
+
+const FilterBox = styled(Box)`
+`
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -77,23 +143,38 @@ export default function Home() {
   return (
     <BORDER>
       <H1>Relatório de Vendas</H1>
+      <Customers>
+      <FilterBox
+        filterProducts={(products) => handleFilter(products)}
+        onClick={(customers) => handleOnclick(customers)}
+      />
 
-      <Box filterProducts={(products) => handleFilter(products)} onClick = {(costumers)=> handleOnclick(costumers)}/>
-      	<ToastContainer
-				position="top-right"
-				autoClose={5000}
-				hideProgressBar={false}
-				newestOnTop={false}
-				closeOnClick
-				rtl={false}
-				pauseOnFocusLoss={false}
-				draggable
-				pauseOnHover
-				theme="dark"
-			/>
+      {selectedProduct && (
+        <CustomersTable border="1">
+          <thead>
+            <tr>
+              <TH>Cliente</TH>
+              <TH>Email</TH>
+              <TH>Data de Processamento</TH>
+            </tr>
+          </thead>
+          <tbody>
+            {selectedProduct.map((customers, index) => (
+              <tr key={index}>
+                <TD>{customers.name}</TD>
+                <TD>{customers.email}</TD>
+                <TD>{formatToBRLDate(customers.process_date)}</TD>
+              </tr>
+            ))}
+          </tbody>
+        </CustomersTable>
+      )}
+      </Customers>
+
+      
       <MAIN>
         {!!products && products?.length ? (
-          <TABLE border="1">
+          <ProductsTable border="1">
             <thead>
               <tr>
                 <TH>Nome do Produto</TH>
@@ -115,34 +196,11 @@ export default function Home() {
                 </tr>
               ))}
             </tbody>
-          </TABLE>
-        ):(
-          <TABLE>
-          <h2>Nenhum produto encontrado.</h2>
-
-          </TABLE>
-
-        )}
-
-        {selectedProduct && (
-          <TABLE border="1">
-            <thead>
-              <tr>
-                <TH>Cliente</TH>
-                <TH>Email</TH>
-                <TH>Data de Processamento</TH>
-              </tr>
-            </thead>
-            <tbody>
-              {selectedProduct.map((customers, index) => (
-                <tr key={index}>
-                  <TD>{customers.name}</TD>
-                  <TD>{customers.email}</TD>
-                  <TD>{formatToBRLDate(customers.process_date)}</TD>
-                </tr>
-              ))}
-            </tbody>
-          </TABLE>
+          </ProductsTable>
+        ) : (
+          <ProductsTable>
+            <h2>Nenhum produto encontrado.</h2>
+          </ProductsTable>
         )}
       </MAIN>
     </BORDER>

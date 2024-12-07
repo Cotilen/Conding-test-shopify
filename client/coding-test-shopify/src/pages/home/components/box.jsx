@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { getOrdersByDate, getOrdersByMonth } from "../../../services/Orders.js";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const PeriodoContainer = styled.div`
   border: 1px solid #00bcd4;
@@ -9,7 +10,8 @@ const PeriodoContainer = styled.div`
   padding: 1.5rem;
   background-color: #333333;
   max-width: 800px;
-  margin: auto;
+  margin: 1rem;
+  margin-bottom: 2rem;
 `;
 
 const Header = styled.div`
@@ -36,6 +38,7 @@ const Fields = styled.div`
 
   @media (max-width: 768px) {
     flex-direction: column;
+    gap: 0;
   }
 `;
 
@@ -86,7 +89,7 @@ const Dates = styled.div`
   }
 `;
 
-const Box = ({filterProducts, onClick}) => {
+const Box = ({ filterProducts, onClick }) => {
   const [initialDate, setInitialDate] = useState(null);
   const [finalDate, setFinalDate] = useState(null);
   const [month, setMonth] = useState(null);
@@ -97,24 +100,52 @@ const Box = ({filterProducts, onClick}) => {
     setMonth(month);
   };
 
-  const handleFilter = async () =>{
+  const handleFilter = async () => {
     if (initialDate && finalDate) {
+      const toastId = toast.loading("Carregando...");
+
       const response = await getOrdersByDate(initialDate, finalDate);
 
-      filterProducts(response)
-      onClick("")
+      filterProducts(response);
+      onClick("");
+      toast.update(toastId, {
+        render: "Carregamento concluído!",
+        type: toast.success,
+        isLoading: false,
+        autoClose: 2500,
+      });
     } else if (month) {
+      const toastId = toast.loading("Carregando...");
+
       const response = await getOrdersByMonth(month);
 
-      filterProducts(response)
-      onClick("")
+      filterProducts(response);
+      onClick("");
+      toast.update(toastId, {
+        render: "Carregamento concluído!",
+        type: toast.success,
+        isLoading: false,
+        autoClose: 2500,
+      });
     } else {
       toast.error("Selecione as datas ou o mês que deseja filtrar");
     }
-  }
+  };
 
   return (
     <PeriodoContainer>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
       <Header>
         <span className="icon">📅</span>
         <h3>Filtre por período ou mês::</h3>
@@ -132,20 +163,6 @@ const Box = ({filterProducts, onClick}) => {
               />
             </div>
           </Dates>
-
-          <Dates>
-            <div>
-              <label htmlFor="data-inicial">Mês Específico</label>
-              <input
-                type="month"
-                id="month"
-                value={month}
-                onChange={(e) => handleOnChange(e.target.value)}
-              />
-            </div>
-          </Dates>
-        </Field>
-        <Field>
           <Dates>
             <div>
               <label htmlFor="data-final">Data Final</label>
@@ -154,6 +171,19 @@ const Box = ({filterProducts, onClick}) => {
                 id="data-final"
                 value={finalDate}
                 onChange={(e) => setFinalDate(e.target.value)}
+              />
+            </div>
+          </Dates>
+        </Field>
+        <Field>
+          <Dates>
+            <div>
+              <label htmlFor="data-inicial">Mês Específico</label>
+              <input
+                type="month"
+                id="month"
+                value={month}
+                onChange={(e) => handleOnChange(e.target.value)}
               />
             </div>
           </Dates>
