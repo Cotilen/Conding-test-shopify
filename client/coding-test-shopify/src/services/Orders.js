@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export async function getOrdersByDate(inicialdate, finaldate){
-    const url = `https://conding-test-shopify.onrender.com/api/orders/processed?dataInicial=${inicialdate}&dataFinal=${finaldate}`
+    const url = `https://coding-test-voyant.onrender.com/api/orders/processed?dataInicial=${inicialdate}&dataFinal=${finaldate}`
     const accessToken = localStorage.getItem('accessToken');
 
     const response = await axios.get(url,{
@@ -15,7 +15,7 @@ export async function getOrdersByDate(inicialdate, finaldate){
 }
 
 export async function getOrdersByMonth(month){
-    const url = `https://conding-test-shopify.onrender.com/api/orders/month?month=${month}`
+    const url = `https://coding-test-voyant.onrender.com/api/orders/month?month=${month}`
     const accessToken = localStorage.getItem('accessToken');
 
     const response = await axios.get(url,{
