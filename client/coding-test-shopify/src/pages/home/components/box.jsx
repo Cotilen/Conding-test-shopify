@@ -102,18 +102,23 @@ const Box = ({ filterProducts, onClick }) => {
 
   const handleFilter = async () => {
     if (initialDate && finalDate) {
-      const toastId = toast.loading("Carregando...");
+      if(initialDate > finalDate){
+        toast.error("A data inicial não pode ser maior que a final!")
+      }else{
+        const toastId = toast.loading("Carregando...");
 
-      const response = await getOrdersByDate(initialDate, finalDate);
-
-      filterProducts(response);
-      onClick("");
-      toast.update(toastId, {
-        render: "Carregamento concluído!",
-        type: toast.success,
-        isLoading: false,
-        autoClose: 2500,
-      });
+        const response = await getOrdersByDate(initialDate, finalDate);
+  
+        filterProducts(response);
+        onClick("");
+        toast.update(toastId, {
+          render: "Carregamento concluído!",
+          type: toast.success,
+          isLoading: false,
+          autoClose: 2500,
+        });
+      }
+  
     } else if (month) {
       const toastId = toast.loading("Carregando...");
 
